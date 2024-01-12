@@ -7,8 +7,9 @@ const BadRequestError = require('../errors/bad-request-err');
 const ForbiddenError = require('../errors/forbidden-error');
 
 const getMovies = async (req, res, next) => {
+  const owner = req.user._id;
   try {
-    const movies = await Movie.find({}).sort({ createdAt: -1 });
+    const movies = await Movie.find({ owner }).sort({ createdAt: -1 });
     return res.send(movies);
   } catch (error) {
     return next(error);

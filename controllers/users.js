@@ -83,6 +83,9 @@ const updateUser = async (req, res, next) => {
     );
     return res.send(user);
   } catch (error) {
+    if (error.code === MONGO_DUPLICATE_ERROR_CODE) {
+      return next(new ConflictError('Пользователь с таким email уже зарегистрирован'));
+    }
     if (error.name === 'ValidationError') {
       return next(new BadRequestError('Ошибка валидации полей'));
     }
